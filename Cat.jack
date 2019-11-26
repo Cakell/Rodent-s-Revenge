@@ -1,0 +1,707 @@
+
+
+/** Implements a cat in the Rodent's Revenge game. */
+class Cat {
+
+   field int x, y;    // screen location of the cat's top-left corner
+   field int size;    // size of a game block's edge, in pixels
+   field int status;  // 0 = standing, 1 = sitting, 2 = cheese
+
+   /** Constructs a new cat with the default location. */
+   constructor Cat new(int index) {
+      if (index = 0) {
+	      let x = 0;
+          let y = 0;
+	  }
+	  if (index = 1) {
+	      let x = 496;
+          let y = 240;
+	  }
+      let size = 15;
+	  let status = 0;
+      do drawStanding();
+      return this;
+   }
+
+   /** Disposes this cat. */
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+   
+   /** Gets the x coordinate of the cat. */
+   method int getX() {
+      return x;
+   }
+   
+   /** Gets the y coordinate of the cat. */
+   method int getY() {
+      return y;
+   }
+   
+   /** Gets the status of the cat (0 = standing, 1 = sitting, 2 = cheese). */
+   method int getStatus() {
+      return status;
+   }
+   
+   /** Sets the status of the cat (0 = standing, 1 = sitting, 2 = cheese). */
+   method void setStatus(int newStatus) {
+      if (newStatus = 0) {
+	      let status = 0;
+		  return;
+	  }
+	  if (newStatus = 1) {
+	      let status = 1;
+		  return;
+	  }
+	  if (newStatus = 2) {
+	      let status = 2;
+		  return;
+	  }
+      return;
+   }
+   
+   /** Checks if the cat can move down-left (diagonally).
+       Returns false if the cat is in a leftmost or bottommost cell,
+	   or if there is a game block to its lower-left.
+	   Returns true otherwise.
+	   */
+   method int canMoveDownLeft() {
+      var int memAddress, blockXCord;
+	  if ((x < 16) | (y > 239)) {
+	      return false;
+	  }
+	  let memAddress = 16384 + (32 * (y + 16)) + Math.divide(x - 16, 16);
+	  if (Memory.peek(memAddress) = -1) {
+          return false;
+      }
+	  return true;
+   }
+   
+   /** Checks if the cat can move down-left (diagonally).
+       Returns false if the cat is in a rightmost or bottommost cell,
+	   or if there is a game block on its lower-right.
+	   Returns true otherwise.
+	   */
+   method int canMoveDownRight() {
+      var int memAddress, blockXCord;
+	  if ((x > 495) | (y > 239)) {
+	      return false;
+	  }
+	  let memAddress = 16384 + (32 * (y + 16)) + Math.divide(x + 16, 16);
+	  if (Memory.peek(memAddress) = -1) {
+          return false;
+      }
+	  return true;
+   }
+   
+   /** Checks if the cat can move up-left (diagonally).
+       Returns false if the cat is in a leftmost or topmost cell,
+	   or if there is a game block to its upper-left.
+	   Returns true otherwise.
+	   */
+   method int canMoveUpLeft() {
+      var int memAddress, blockXCord;
+	  if ((x < 16) | (y < 16)) {
+	      return false;
+	  }
+	  let memAddress = 16384 + (32 * (y - 16)) + Math.divide(x - 16, 16);
+	  if (Memory.peek(memAddress) = -1) {
+          return false;
+      }
+	  return true;
+   }
+   
+   /** Checks if the cat can move up-left (diagonally).
+       Returns false if the cat is in a rightmost or topmost cell,
+	   or if there is a game block on its upper-right.
+	   Returns true otherwise.
+	   */
+   method int canMoveUpRight() {
+      var int memAddress, blockXCord;
+	  if ((x > 495) | (y < 16)) {
+	      return false;
+	  }
+	  let memAddress = 16384 + (32 * (y - 16)) + Math.divide(x + 16, 16);
+	  if (Memory.peek(memAddress) = -1) {
+          return false;
+      }
+	  return true;
+   }
+   
+   /** Checks if the cat can move up.
+       Returns false if the cat is in a upmost cell or if there is
+	   a game block above it. Returns true otherwise.
+	   */
+   method int canMoveUp() {
+      var int memAddress, blockXCord;
+	  if (y < 16) {
+	      return false;
+	  }
+	  let memAddress = 16384 + (32 * (y - 16)) + Math.divide(x, 16);
+	  if (Memory.peek(memAddress) = -1) {
+          return false;
+      }
+	  return true;
+   }
+   
+   /** Checks if the cat can move down.
+       Returns false if the cat is in a downmost cell or if there is
+	   a game block below it. Returns true otherwise.
+	   */
+   method int canMoveDown() {
+      var int memAddress, blockXCord;
+	  if (y > 239) {
+	      return false;
+	  }
+	  let memAddress = 16384 + (32 * (y + 16)) + Math.divide(x, 16);
+	  if (Memory.peek(memAddress) = -1) {
+          return false;
+      }
+	  return true;
+   }
+   
+   /** Checks if the cat can move left.
+       Returns false if the cat is in a leftmost cell or if there is
+	   a game block on its left. Returns true otherwise.
+	   */
+   method int canMoveLeft() {
+      var int memAddress, blockXCord;
+	  if (x < 16) {
+	      return false;
+	  }
+	  let memAddress = 16384 + (32 * y) + Math.divide(x - 16, 16);
+	  if (Memory.peek(memAddress) = -1) {
+          return false;
+      }
+	  return true;
+   }
+   
+   /** Checks if the cat can move right.
+       Returns false if the cat is in a rightmost cell or if there is
+	   a game block on its right. Returns true otherwise.
+	   */
+   method int canMoveRight() {
+      var int memAddress, blockXCord;
+	  if (x > 495) {
+	      return false;
+	  }
+	  let memAddress = 16384 + (32 * y) + Math.divide(x + 16, 16);
+	  if (Memory.peek(memAddress) = -1) {
+          return false;
+      }
+	  return true;
+   }
+   
+   /** Returns true iff the cat is blocked from all 8 directions. */
+   method boolean cantMove() {
+   
+      if ((~(canMoveDownLeft())) & (~(canMoveDownRight())) &  (~(canMoveUpLeft())) &
+	     (~(canMoveUpRight())) & (~(canMoveUp())) & (~(canMoveDown())) &
+		 (~(canMoveLeft())) & (~(canMoveRight()))) {
+		   
+		   return true;
+	   }
+	   return false;
+   }
+   
+   /** Draws the cat on the screen. */
+   method void draw() {
+      if (status = 0) {
+	      do drawStanding();
+		  return;
+	  }
+	  if (status = 1) {
+	      do drawSitting();
+		  return;
+	  }
+	  if (status = 2) {
+	      do drawCheese();
+		  return;
+	  }
+	  return;
+   }
+   
+   /** Draws on the screen the cat while it is standing. */
+   method void drawStanding() {
+      var int memAddress;
+	  let memAddress = 16384 + (32 * y) + Math.divide(x, 16);
+	  do Memory.poke(memAddress+0, 1);
+	  do Memory.poke(memAddress+32, 17410);
+	  do Memory.poke(memAddress+64, -22014);
+	  do Memory.poke(memAddress+96, -17918);
+	  do Memory.poke(memAddress+128, -32255);
+	  do Memory.poke(memAddress+160, -21507);
+	  do Memory.poke(memAddress+192, -32253);
+	  do Memory.poke(memAddress+224, -28159);
+	  do Memory.poke(memAddress+256, 27649);
+	  do Memory.poke(memAddress+288, 4097);
+	  do Memory.poke(memAddress+320, 4602);
+	  do Memory.poke(memAddress+352, 9498);
+	  do Memory.poke(memAddress+384, 23849);
+	  do Memory.poke(memAddress+416, 21833);
+	  do Memory.poke(memAddress+448, 26994);
+	  do Memory.poke(memAddress+480, 3612);
+	  return;
+   }
+   
+   /** Draws on the screen the cat while it is sitting. */
+   method void drawSitting() {
+      var int memAddress;
+	  let memAddress = 16384 + (32 * y) + Math.divide(x, 16);
+	  do Memory.poke(memAddress+0, 0);
+	  do Memory.poke(memAddress+32, 17408);
+	  do Memory.poke(memAddress+64, -22016);
+	  do Memory.poke(memAddress+96, -17920);
+	  do Memory.poke(memAddress+128, -32256);
+	  do Memory.poke(memAddress+160, -21512);
+	  do Memory.poke(memAddress+192, -32252);
+	  do Memory.poke(memAddress+224, -28158);
+	  do Memory.poke(memAddress+256, 27650);
+	  do Memory.poke(memAddress+288, 4099);
+	  do Memory.poke(memAddress+320, 5317);
+	  do Memory.poke(memAddress+352, 11529);
+	  do Memory.poke(memAddress+384, 5105);
+	  do Memory.poke(memAddress+416, 3074);
+	  do Memory.poke(memAddress+448, 12);
+	  do Memory.poke(memAddress+480, 0);
+	  return;
+   }
+
+   /** Draws on the screen the cheese that replaces a beaten cat. */
+   method void drawCheese() {
+      var int memAddress;
+	  let memAddress = 16384 + (32 * y) + Math.divide(x, 16);
+	  do Memory.poke(memAddress+0, 0);
+	  do Memory.poke(memAddress+32, 0);
+	  do Memory.poke(memAddress+64, 0);
+	  do Memory.poke(memAddress+96, 0);
+	  do Memory.poke(memAddress+128, 16382);
+ 	  do Memory.poke(memAddress+160, 32766);
+	  do Memory.poke(memAddress+192, 32762);
+	  do Memory.poke(memAddress+224, 24562);
+	  do Memory.poke(memAddress+256, 20450);
+	  do Memory.poke(memAddress+288, 18370);
+	  do Memory.poke(memAddress+320, 9092);
+	  do Memory.poke(memAddress+352, 4104);
+	  do Memory.poke(memAddress+384, 2064);
+	  do Memory.poke(memAddress+416, 1056);
+	  do Memory.poke(memAddress+448, 960);
+	  do Memory.poke(memAddress+480, 0);
+	  return;
+   }
+   
+   /** Erases the cat from the screen. */
+   method void erase() {
+      do Screen.setColor(false);
+	  do Screen.drawRectangle(x, y, x + size, y + size);
+	  return;
+   }
+   
+      /** Moves the cat towards the mouse by 16 pixels. */
+   method void move(int mouseXCord, int mouseYCord) {
+      if ((mouseXCord > x) & (mouseYCord > y)) {
+	      do moveTowardsMouseDownRight();
+		  return;
+	  }
+	  if ((mouseXCord > x) & (mouseYCord = y)) {
+	      do moveTowardsMouseRight();
+		  return;
+	  }
+	  if ((mouseXCord > x) & (mouseYCord < y)) {
+	      do moveTowardsMouseUpRight();
+		  return;
+	  }
+	  if ((mouseXCord = x) & (mouseYCord > y)) {
+	      do moveTowardsMouseDown();
+		  return;
+	  }
+	  if ((mouseXCord = x) & (mouseYCord < y)) {
+	      do moveTowardsMouseUp();
+		  return;
+	  }
+	  if ((mouseXCord < x) & (mouseYCord > y)) {
+	      do moveTowardsMouseDownLeft();
+		  return;
+	  }
+	  if ((mouseXCord < x) & (mouseYCord = y)) {
+	      do moveTowardsMouseLeft();
+		  return;
+	  }
+	  if ((mouseXCord < x) & (mouseYCord < y)) {
+	      do moveTowardsMouseUpLeft();
+		  return;
+	  }
+	  return;
+   }
+   
+      /** Moves the cat towards the mouse that is 
+       located to the down & left of the cat. */
+   method void moveTowardsMouseDownLeft() {
+       if (canMoveDownLeft()) {
+		   do moveDownLeft();
+		   return;
+	   }
+	   if (canMoveDown()) {
+		   do moveDown();
+		   return;
+	   }
+	   if (canMoveLeft()) {
+		   do moveLeft();
+		   return;
+	   }
+	   if (canMoveDownRight()) {
+           do moveDownRight();
+		   return;
+	   }
+	   if (canMoveUpLeft()) {
+		   do moveUpLeft();
+		   return;
+	   }
+	   if (canMoveRight()) {
+		   do moveRight();
+		   return;
+	   }
+	   if (canMoveUp()) {
+		   do moveUp();
+		   return;
+	   }
+	   if (canMoveUpRight()) {
+		   do moveUpRight();
+		   return;
+	   }
+	   return;
+   }
+   
+   /** Moves the cat towards the mouse that is 
+       located to the down & right of the cat. */
+   method void moveTowardsMouseDownRight() {
+       if (canMoveDownRight()) {
+           do moveDownRight();
+		   return;
+	   }
+	   if (canMoveRight()) {
+		   do moveRight();
+		   return;
+	   }
+	   if (canMoveDown()) {
+		   do moveDown();
+		   return;
+	   }
+	   if (canMoveUpRight()) {
+		   do moveUpRight();
+		   return;
+	   }
+	   if (canMoveDownLeft()) {
+		   do moveDownLeft();
+		   return;
+	   }
+	   if (canMoveLeft()) {
+		   do moveLeft();
+		   return;
+	   }
+	   if (canMoveUp()) {
+		   do moveUp();
+		   return;
+	   }
+	   if (canMoveUpLeft()) {
+		   do moveUpLeft();
+		   return;
+	   }
+	   return;
+   }
+   
+      /** Moves the cat towards the mouse that is 
+       located to the up & left of the cat. */
+   method void moveTowardsMouseUpLeft() {
+       if (canMoveUpLeft()) {
+		   do moveUpLeft();
+		   return;
+	   }
+	   if (canMoveLeft()) {
+		   do moveLeft();
+		   return;
+	   }
+	   if (canMoveUp()) {
+		   do moveUp();
+		   return;
+	   }
+	   if (canMoveDownLeft()) {
+		   do moveDownLeft();
+		   return;
+	   }
+	   if (canMoveUpRight()) {
+		   do moveUpRight();
+		   return;
+	   }
+	   if (canMoveDown()) {
+		   do moveDown();
+		   return;
+	   }
+	   if (canMoveRight()) {
+		   do moveRight();
+		   return;
+	   }
+	   if (canMoveDownRight()) {
+           do moveDownRight();
+		   return;
+	   }
+	   return;
+   }
+   
+   /** Moves the cat towards the mouse that is 
+       located to the up & right of the cat. */
+   method void moveTowardsMouseUpRight() {
+       if (canMoveUpRight()) {
+		   do moveUpRight();
+		   return;
+	   }
+	   if (canMoveRight()) {
+		   do moveRight();
+		   return;
+	   }
+	   if (canMoveUp()) {
+		   do moveUp();
+		   return;
+	   }
+	   if (canMoveDownRight()) {
+           do moveDownRight();
+		   return;
+	   }
+	   if (canMoveUpLeft()) {
+		   do moveUpLeft();
+		   return;
+	   }
+	   if (canMoveDown()) {
+		   do moveDown();
+		   return;
+	   }
+	   if (canMoveLeft()) {
+		   do moveLeft();
+		   return;
+	   }
+	   if (canMoveDownLeft()) {
+		   do moveDownLeft();
+		   return;
+	   }
+	   return;
+   }
+   
+   /** Moves the cat towards the mouse that is located above the cat. */
+   method void moveTowardsMouseUp() {
+       if (canMoveUp()) {
+		   do moveUp();
+		   return;
+	   }
+	   if (canMoveUpLeft()) {
+		   do moveUpLeft();
+		   return;
+	   }
+	   if (canMoveUpRight()) {
+		   do moveUpRight();
+		   return;
+	   }
+	   if (canMoveRight()) {
+		   do moveRight();
+		   return;
+	   }
+	   if (canMoveLeft()) {
+		   do moveLeft();
+		   return;
+	   }
+	   if (canMoveDownLeft()) {
+		   do moveDownLeft();
+		   return;
+	   }
+	   if (canMoveDownRight()) {
+           do moveDownRight();
+		   return;
+	   }
+	   if (canMoveDown()) {
+		   do moveDown();
+		   return;
+	   }
+	   return;
+   }
+   
+   /** Moves the cat towards the mouse that is located below the cat. */
+   method void moveTowardsMouseDown() {
+       if (canMoveDown()) {
+		   do moveDown();
+		   return;
+	   }
+	   if (canMoveDownRight()) {
+           do moveDownRight();
+		   return;
+	   }
+	   if (canMoveDownLeft()) {
+		   do moveDownLeft();
+		   return;
+	   }
+	   if (canMoveLeft()) {
+		   do moveLeft();
+		   return;
+	   }
+	   if (canMoveRight()) {
+		   do moveRight();
+		   return;
+	   }
+	   if (canMoveUpRight()) {
+		   do moveUpRight();
+		   return;
+	   }
+	   if (canMoveUpLeft()) {
+		   do moveUpLeft();
+		   return;
+	   }
+	   if (canMoveUp()) {
+		   do moveUp();
+		   return;
+	   }
+	   return;
+   }
+   
+   /** Moves the cat towards the mouse that is 
+       located to the left of the cat. */
+   method void moveTowardsMouseLeft() {
+       if (canMoveLeft()) {
+		   do moveLeft();
+		   return;
+	   }
+	   if (canMoveUpLeft()) {
+		   do moveUpLeft();
+		   return;
+	   }
+	   if (canMoveDownLeft()) {
+		   do moveDownLeft();
+		   return;
+	   }
+	   if (canMoveDown()) {
+		   do moveDown();
+		   return;
+	   }
+	   if (canMoveUp()) {
+		   do moveUp();
+		   return;
+	   }
+	   if (canMoveUpRight()) {
+		   do moveUpRight();
+		   return;
+	   }
+	   if (canMoveDownRight()) {
+           do moveDownRight();
+		   return;
+	   }
+	   if (canMoveRight()) {
+		   do moveRight();
+		   return;
+	   }
+	   return;
+   }
+   
+   /** Moves the cat towards the mouse that is 
+       located to the right of the cat. */
+   method void moveTowardsMouseRight() {
+       if (canMoveRight()) {
+		   do moveRight();
+		   return;
+	   }
+	   if (canMoveUpRight()) {
+		   do moveUpRight();
+		   return;
+	   }
+	   if (canMoveDownRight()) {
+           do moveDownRight();
+		   return;
+	   }
+	   if (canMoveDown()) {
+		   do moveDown();
+		   return;
+	   }
+	   if (canMoveUp()) {
+		   do moveUp();
+		   return;
+	   }
+	   if (canMoveUpLeft()) {
+		   do moveUpLeft();
+		   return;
+	   }
+	   if (canMoveDownLeft()) {
+		   do moveDownLeft();
+		   return;
+	   }
+	   if (canMoveLeft()) {
+		   do moveLeft();
+		   return;
+	   }
+	   return;
+   }
+   
+   /** Moves the cat left by 16 pixels. */
+   method void moveDownLeft() {
+      do erase();
+	  let x = x - 16;
+	  let y = y + 16;
+      do draw();
+      return;
+   }
+
+   /** Moves the cat right by 16 pixels. */
+   method void moveDownRight() {
+      do erase();
+	  let x = x + 16;
+	  let y = y + 16;
+      do draw();
+      return;
+   }
+   
+   /** Moves the cat left by 16 pixels. */
+   method void moveUpLeft() {
+      do erase();
+	  let x = x - 16;
+	  let y = y - 16;
+      do draw();
+      return;
+   }
+
+   /** Moves the cat right by 16 pixels. */
+   method void moveUpRight() {
+      do erase();
+	  let x = x + 16;
+	  let y = y - 16;
+      do draw();
+      return;
+   }
+
+   /** Moves the cat up by 16 pixels. */
+   method void moveUp() {
+      do erase();
+	  let y = y - 16;
+      do draw();
+      return;
+   }
+
+   /** Moves the cat down by 16 pixels. */
+   method void moveDown() {
+      do erase();
+	  let y = y + 16;
+      do draw();
+      return;
+   }
+
+   /** Moves the cat left by 16 pixels. */
+   method void moveLeft() {
+      do erase();
+	  let x = x - 16;
+      do draw();
+      return;
+   }
+
+   /** Moves the cat right by 16 pixels. */
+   method void moveRight() {
+      do erase();
+	  let x = x + 16;
+      do draw();
+      return;
+   }
+}
