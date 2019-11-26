@@ -26,3 +26,7 @@ Gameplay:
     The game is won when the entire cheese is eaten.
     However, if one of the cats touches the mouse, it is GAME OVER!
     Notice that the game speed is quite high, so be careful when you open a clear path to one of the cats.
+
+Remarks:
+    At the moment, the code isn't quite extendible, and should be generelized to enable simple changes in the game,
+    such as increasing the number of cats in the game, their initial positions or their speed.
