@@ -1,17 +1,15 @@
 
 
 /** Initializes a new Rodent game and starts running it. */
-class Main
-{
-	function void main()
-	{
+class Main {
+	function void main() {
 		var RodentGame game;
 		do RodentGame.init();
 		do Mouse.init();
 		do Cat.init();
-        let game = RodentGame.new();
-        do game.run();
-        do game.dispose();
-        return;
+		let game = RodentGame.new();
+		do game.run();
+		do game.dispose();
+		return;
 	}
 }
