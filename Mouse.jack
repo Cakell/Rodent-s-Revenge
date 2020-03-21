@@ -3,17 +3,29 @@
 /** Implements the mouse in the Rodent's Revenge game. */
 class Mouse {
 
-   static int size;               // size of a game block's edge, in pixels
-   field int x, y;                // screen location of the mouse's top-left corner
-   field int blockXCord, blockYCord;          // screen location of a pushed block
-   field boolean pushedBlock;  // true iff the mouse pushed a block during movement
-   field boolean vertical;     // true: the mouse moved up\down. false: left\right
+   static int UP, DOWN, LEFT, RIGHT;	// movement directions of the mouse.
+   static int blockSize;				// size of a game block's edge, in pixels
+   
+   field int x, y;						// screen location of the mouse's top-left corner
+   field int blockXCord, blockYCord;	// screen location of a pushed block
+   field boolean pushedBlock;			// true iff the mouse pushed a block during movement
+   field boolean vertical;				// true: the mouse moved up\down. false: left\right
 
+   /** Initializes the static variables. */
+    function void init() {
+		let UP = 1;
+		let DOWN = 2;
+		let LEFT = 3;
+		let RIGHT = 4;
+		let blockSize = 16;
+		
+		return; 
+	}
+   
    /** Constructs a new mouse with the default location. */
    constructor Mouse new() {
       let x = 240;
       let y = 112;
-      let size = 15;
       do draw();
       return this;
    }
@@ -295,7 +307,7 @@ class Mouse {
    /** Erases the mouse from the screen. */
    method void erase() {
       do Screen.setColor(false);
-	  do Screen.drawRectangle(x, y, x + size, y + size);
+	  do Screen.drawRectangle(x, y, x + blockSize - 1, y + blockSize - 1);
 	  return;
    }
    
@@ -328,10 +340,10 @@ class Mouse {
    method void drawPushedBlock() {
       do Screen.setColor(true);
 	  if (vertical) {
-          do Screen.drawRectangle(x, blockYCord, x + size, blockYCord + size);
+          do Screen.drawRectangle(x, blockYCord, x + blockSize - 1, blockYCord + blockSize - 1);
 		  return;
 	  }
-	  do Screen.drawRectangle(blockXCord, y, blockXCord + size, y + size);
+	  do Screen.drawRectangle(blockXCord, y, blockXCord + blockSize - 1, y + blockSize - 1);
 	  return;
    }
    
@@ -339,21 +351,21 @@ class Mouse {
    method void move(int direction) {
       let pushedBlock = false;   // Resets state from previous call.
       let vertical = false;
-      if (direction = 1) {
+      if (direction = UP) {
 	      let vertical = true;
 	      do moveUp();
 		  return;
       }
-      if (direction = 2) {
+      if (direction = DOWN) {
 	      let vertical = true;
 		  do moveDown();
 		  return;
 	  }
-      if (direction = 3) {
+      if (direction = LEFT) {
 	      do moveLeft();
 		  return;
 	  }
-      if (direction = 4) {
+      if (direction = RIGHT) {
 	      do moveRight();
 		  return;
 	  }

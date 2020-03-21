@@ -3,10 +3,20 @@
 /** Implements a cat in the Rodent's Revenge game. */
 class Cat {
 
+   static int STANDING, SITTING, CHEESE;
+   
    field int x, y;    // screen location of the cat's top-left corner
    field int size;    // size of a game block's edge, in pixels
-   field int status;  // 0 = standing, 1 = sitting, 2 = cheese
+   field int status;  // 0 = STANDING, 1 = SITTING, 2 = CHEESE
 
+   /** Initializes the static variables. */
+    function void init() {
+		let STANDING = 0;
+		let SITTING = 1;
+		let CHEESE = 2;
+		return; 
+	}
+   
    /** Constructs a new cat with the default location. */
    constructor Cat new(int index) {
       if (index = 0) {
@@ -39,26 +49,15 @@ class Cat {
       return y;
    }
    
-   /** Gets the status of the cat (0 = standing, 1 = sitting, 2 = cheese). */
+   /** Gets the status of the cat (STANDING / SITTING / CHEESE). */
    method int getStatus() {
       return status;
    }
    
-   /** Sets the status of the cat (0 = standing, 1 = sitting, 2 = cheese). */
+   /** Sets the status of the cat (STANDING / SITTING / CHEESE). */
    method void setStatus(int newStatus) {
-      if (newStatus = 0) {
-	      let status = 0;
-		  return;
-	  }
-	  if (newStatus = 1) {
-	      let status = 1;
-		  return;
-	  }
-	  if (newStatus = 2) {
-	      let status = 2;
-		  return;
-	  }
-      return;
+      let status = newStatus;
+	  return;
    }
    
    /** Checks if the cat can move down-left (diagonally).
@@ -193,29 +192,28 @@ class Cat {
 	  return true;
    }
    
-   /** Returns true iff the cat is blocked from all 8 directions. */
-   method boolean cantMove() {
+   /** Returns true if the cat can move. */
+   method boolean canMove() {
    
-      if ((~(canMoveDownLeft())) & (~(canMoveDownRight())) &  (~(canMoveUpLeft())) &
-	     (~(canMoveUpRight())) & (~(canMoveUp())) & (~(canMoveDown())) &
-		 (~(canMoveLeft())) & (~(canMoveRight()))) {
-		   
-		   return true;
-	   }
-	   return false;
+      if (canMoveDownLeft() | canMoveDownRight() |  canMoveUpLeft() |
+	     canMoveUpRight() | canMoveUp() | canMoveDown() |
+		 canMoveLeft() | canMoveRight()) {
+			 return true;
+		 }
+		 return false;
    }
    
    /** Draws the cat on the screen. */
    method void draw() {
-      if (status = 0) {
+      if (status = STANDING) {
 	      do drawStanding();
 		  return;
 	  }
-	  if (status = 1) {
+	  if (status = SITTING) {
 	      do drawSitting();
 		  return;
 	  }
-	  if (status = 2) {
+	  if (status = CHEESE) {
 	      do drawCheese();
 		  return;
 	  }
