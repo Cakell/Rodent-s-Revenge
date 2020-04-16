@@ -9,10 +9,14 @@ push constant 4
 pop static 3
 push constant 16
 pop static 4
+push constant 16384
+pop static 5
+push constant 2
+pop static 6
 push constant 0
 return
 function Mouse.new 0
-push constant 6
+push constant 7
 call Memory.alloc 1
 pop pointer 0
 push constant 240
@@ -42,79 +46,23 @@ push argument 0
 pop pointer 0
 push this 1
 return
-function Mouse.blockPushedUpwards 1
+function Mouse.canMoveUpwards 0
 push argument 0
 pop pointer 0
-push constant 16384
-push constant 32
 push this 1
-push constant 16
-sub
-call Math.multiply 2
-add
-push this 0
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
+push constant 0
 eq
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push constant 0
-not
 return
 label IF_FALSE0
-push constant 0
-return
-function Mouse.catCantMoveUp 1
-push argument 0
-pop pointer 0
-push constant 16384
-push constant 32
-push this 3
-push constant 16
-sub
-call Math.multiply 2
-add
 push this 0
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
-return
-function Mouse.canMoveUpwards 1
-push argument 0
-pop pointer 0
 push this 1
 push constant 16
-lt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 2
-neg
-return
-label IF_FALSE0
-push pointer 0
-call Mouse.blockPushedUpwards 1
+sub
+call Block.blockInLocation 2
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
@@ -122,27 +70,19 @@ push this 1
 push constant 32
 sub
 pop this 3
-push constant 16384
-push constant 32
 push this 3
-call Math.multiply 2
-add
-push this 0
-push constant 16
-call Math.divide 2
-add
-pop local 0
+push constant 0
+lt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+return
+label IF_FALSE2
 label WHILE_EXP0
+push this 0
 push this 3
-push constant 1
-neg
-gt
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-and
+call Block.blockInLocation 2
 not
 if-goto WHILE_END0
 push this 3
@@ -150,601 +90,586 @@ push constant 16
 sub
 pop this 3
 push this 3
-push constant 1
-neg
-gt
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
-push constant 16384
-push constant 32
-push this 3
-call Math.multiply 2
-add
-push this 0
-push constant 16
-call Math.divide 2
-add
-pop local 0
-label IF_FALSE2
-goto WHILE_EXP0
-label WHILE_END0
-push this 3
-push constant 1
-neg
-gt
+push constant 0
+lt
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
+push constant 0
+return
+label IF_FALSE3
+goto WHILE_EXP0
+label WHILE_END0
 push pointer 0
-call Mouse.blockMovedCat 1
+push argument 1
+call Mouse.blockMovedCat 2
 if-goto IF_TRUE4
 goto IF_FALSE4
 label IF_TRUE4
-push this 3
-push constant 0
-eq
+push argument 1
+call Cat.canMove 1
 if-goto IF_TRUE5
 goto IF_FALSE5
 label IF_TRUE5
-push constant 2
-neg
+push constant 0
+not
+pop this 4
+push argument 1
+push constant 0
+not
+call Cat.setPushedByMouse 2
+pop temp 0
+push constant 0
+not
 return
+goto IF_END5
 label IF_FALSE5
-push pointer 0
-call Mouse.catCantMoveUp 1
+push argument 1
+call Cat.getStatus 1
+push static 6
+eq
 if-goto IF_TRUE6
 goto IF_FALSE6
 label IF_TRUE6
-push constant 2
-neg
+push constant 0
+not
+pop this 4
+push argument 1
+call Cat.setSquashedToTrue 1
+pop temp 0
+push constant 0
+not
 return
+goto IF_END6
 label IF_FALSE6
+push constant 0
+return
+label IF_END6
+label IF_END5
 label IF_FALSE4
-push this 3
-return
-label IF_FALSE3
-push constant 2
-neg
-return
-goto IF_END1
-label IF_FALSE1
-push constant 1
-neg
-return
-label IF_END1
-function Mouse.blockPushedDownwards 1
-push argument 0
-pop pointer 0
-push constant 16384
-push constant 32
-push this 1
-push constant 16
-add
-call Math.multiply 2
-add
-push this 0
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
-return
-function Mouse.catCantMoveDown 1
-push argument 0
-pop pointer 0
-push constant 16384
-push constant 32
-push this 3
-push constant 16
-add
-call Math.multiply 2
-add
-push this 0
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
-return
-function Mouse.canMoveDownwards 1
-push argument 0
-pop pointer 0
-push this 1
-push constant 239
-gt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 2
-neg
-return
-label IF_FALSE0
 push pointer 0
-call Mouse.blockPushedDownwards 1
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push this 1
-push constant 32
-add
-pop this 3
-push this 3
-push constant 240
-gt
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
-push constant 2
-neg
-return
-label IF_FALSE2
-push constant 16384
-push constant 32
-push this 3
-call Math.multiply 2
-add
-push this 0
-push constant 16
-call Math.divide 2
-add
-pop local 0
-label WHILE_EXP0
-push this 3
-push constant 241
-lt
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-and
-not
-if-goto WHILE_END0
-push this 3
-push constant 16
-add
-pop this 3
-push this 3
-push constant 241
-lt
-if-goto IF_TRUE3
-goto IF_FALSE3
-label IF_TRUE3
-push constant 16384
-push constant 32
-push this 3
-call Math.multiply 2
-add
-push this 0
-push constant 16
-call Math.divide 2
-add
-pop local 0
-label IF_FALSE3
-goto WHILE_EXP0
-label WHILE_END0
-push this 3
-push constant 241
-lt
-if-goto IF_TRUE4
-goto IF_FALSE4
-label IF_TRUE4
-push pointer 0
-call Mouse.blockMovedCat 1
-if-goto IF_TRUE5
-goto IF_FALSE5
-label IF_TRUE5
-push this 3
-push constant 240
-eq
-if-goto IF_TRUE6
-goto IF_FALSE6
-label IF_TRUE6
-push constant 2
-neg
-return
-label IF_FALSE6
-push pointer 0
-call Mouse.catCantMoveDown 1
+push argument 2
+call Mouse.blockMovedCat 2
 if-goto IF_TRUE7
 goto IF_FALSE7
 label IF_TRUE7
-push constant 2
-neg
+push argument 2
+call Cat.canMove 1
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
+push constant 0
+not
+pop this 4
+push argument 2
+push constant 0
+not
+call Cat.setPushedByMouse 2
+pop temp 0
+push constant 0
+not
 return
+goto IF_END8
+label IF_FALSE8
+push argument 2
+call Cat.getStatus 1
+push static 6
+eq
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
+push constant 0
+not
+pop this 4
+push argument 2
+call Cat.setSquashedToTrue 1
+pop temp 0
+push constant 0
+not
+return
+goto IF_END9
+label IF_FALSE9
+push constant 0
+return
+label IF_END9
+label IF_END8
 label IF_FALSE7
-label IF_FALSE5
-push this 3
-return
-label IF_FALSE4
-push constant 2
-neg
-return
-goto IF_END1
+push constant 0
+not
+pop this 4
 label IF_FALSE1
-push constant 1
-neg
+push constant 0
+not
 return
-label IF_END1
-function Mouse.blockPushedLeftwards 1
+function Mouse.canMoveDownwards 0
 push argument 0
 pop pointer 0
-push constant 16384
-push constant 32
 push this 1
-call Math.multiply 2
-add
-push this 0
-push constant 16
-sub
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
+push constant 240
 eq
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push constant 0
-not
 return
 label IF_FALSE0
-push constant 0
-return
-function Mouse.catCantMoveLeft 1
-push argument 0
-pop pointer 0
-push constant 16384
-push constant 32
-push this 1
-call Math.multiply 2
-add
-push this 2
-push constant 16
-sub
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
-return
-function Mouse.canMoveLeftwards 1
-push argument 0
-pop pointer 0
 push this 0
+push this 1
 push constant 16
-lt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 2
-neg
-return
-label IF_FALSE0
-push pointer 0
-call Mouse.blockPushedLeftwards 1
+add
+call Block.blockInLocation 2
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
-push this 0
-push constant 32
-sub
-pop this 2
-push constant 16384
-push constant 32
 push this 1
-call Math.multiply 2
-add
-push this 2
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-push constant 16384
 push constant 32
-push this 1
-push constant 1
-sub
-call Math.multiply 2
 add
+pop this 3
+push this 3
+push constant 240
 gt
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
+push constant 0
+return
+label IF_FALSE2
 label WHILE_EXP0
-push this 2
-push constant 1
-neg
-gt
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-and
+push this 0
+push this 3
+call Block.blockInLocation 2
 not
 if-goto WHILE_END0
-push this 2
+push this 3
 push constant 16
-sub
-pop this 2
-push constant 16384
-push constant 32
-push this 1
-call Math.multiply 2
 add
-push this 2
-push constant 16
-call Math.divide 2
-add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
-label IF_FALSE2
-push this 2
-push constant 1
-neg
+pop this 3
+push this 3
+push constant 240
 gt
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
+push constant 0
+return
+label IF_FALSE3
+goto WHILE_EXP0
+label WHILE_END0
 push pointer 0
-call Mouse.blockMovedCat 1
+push argument 1
+call Mouse.blockMovedCat 2
 if-goto IF_TRUE4
 goto IF_FALSE4
 label IF_TRUE4
-push this 2
-push constant 0
-eq
+push argument 1
+call Cat.canMove 1
 if-goto IF_TRUE5
 goto IF_FALSE5
 label IF_TRUE5
-push constant 2
-neg
+push constant 0
+not
+pop this 4
+push argument 1
+push constant 0
+not
+call Cat.setPushedByMouse 2
+pop temp 0
+push constant 0
+not
 return
+goto IF_END5
 label IF_FALSE5
-push pointer 0
-call Mouse.catCantMoveLeft 1
+push argument 1
+call Cat.getStatus 1
+push static 6
+eq
 if-goto IF_TRUE6
 goto IF_FALSE6
 label IF_TRUE6
-push constant 2
-neg
+push constant 0
+not
+pop this 4
+push argument 1
+call Cat.setSquashedToTrue 1
+pop temp 0
+push constant 0
+not
 return
+goto IF_END6
 label IF_FALSE6
+push constant 0
+return
+label IF_END6
+label IF_END5
 label IF_FALSE4
-push this 2
-return
-label IF_FALSE3
-push constant 2
-neg
-return
-goto IF_END1
-label IF_FALSE1
-push constant 1
-neg
-return
-label IF_END1
-function Mouse.blockPushedRightwards 1
-push argument 0
-pop pointer 0
-push constant 16384
-push constant 32
-push this 1
-call Math.multiply 2
-add
-push this 0
-push constant 16
-add
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
-return
-function Mouse.catCantMoveRight 1
-push argument 0
-pop pointer 0
-push constant 16384
-push constant 32
-push this 1
-call Math.multiply 2
-add
-push this 2
-push constant 16
-add
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
-return
-function Mouse.canMoveRightwards 1
-push argument 0
-pop pointer 0
-push this 0
-push constant 495
-gt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 2
-neg
-return
-label IF_FALSE0
 push pointer 0
-call Mouse.blockPushedRightwards 1
+push argument 2
+call Mouse.blockMovedCat 2
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push argument 2
+call Cat.canMove 1
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
+push constant 0
+not
+pop this 4
+push argument 2
+push constant 0
+not
+call Cat.setPushedByMouse 2
+pop temp 0
+push constant 0
+not
+return
+goto IF_END8
+label IF_FALSE8
+push argument 2
+call Cat.getStatus 1
+push static 6
+eq
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
+push constant 0
+not
+pop this 4
+push argument 2
+call Cat.setSquashedToTrue 1
+pop temp 0
+push constant 0
+not
+return
+goto IF_END9
+label IF_FALSE9
+push constant 0
+return
+label IF_END9
+label IF_END8
+label IF_FALSE7
+push constant 0
+not
+pop this 4
+label IF_FALSE1
+push constant 0
+not
+return
+function Mouse.canMoveLeftwards 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 0
+push constant 16
+sub
+push this 1
+call Block.blockInLocation 2
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
 push this 0
 push constant 32
-add
+sub
 pop this 2
-push constant 16384
-push constant 32
-push this 1
-call Math.multiply 2
-add
 push this 2
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-push constant 16384
-push constant 32
-push this 1
-push constant 1
-add
-call Math.multiply 2
-add
+push constant 0
 lt
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
+push constant 0
+return
+label IF_FALSE2
 label WHILE_EXP0
 push this 2
-push constant 513
-lt
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-and
+push this 1
+call Block.blockInLocation 2
 not
 if-goto WHILE_END0
 push this 2
 push constant 16
-add
+sub
 pop this 2
-push constant 16384
-push constant 32
-push this 1
-call Math.multiply 2
-add
 push this 2
-push constant 16
-call Math.divide 2
-add
-pop local 0
-goto WHILE_EXP0
-label WHILE_END0
-label IF_FALSE2
-push this 2
-push constant 497
+push constant 0
 lt
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
+push constant 0
+return
+label IF_FALSE3
+goto WHILE_EXP0
+label WHILE_END0
 push pointer 0
-call Mouse.blockMovedCat 1
+push argument 1
+call Mouse.blockMovedCat 2
 if-goto IF_TRUE4
 goto IF_FALSE4
 label IF_TRUE4
-push this 2
+push argument 1
+call Cat.canMove 1
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push constant 0
+not
+pop this 4
+push argument 1
+push constant 0
+not
+call Cat.setPushedByMouse 2
+pop temp 0
+push constant 0
+not
+return
+goto IF_END5
+label IF_FALSE5
+push argument 1
+call Cat.getStatus 1
+push static 6
+eq
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push constant 0
+not
+pop this 4
+push argument 1
+call Cat.setSquashedToTrue 1
+pop temp 0
+push constant 0
+not
+return
+goto IF_END6
+label IF_FALSE6
+push constant 0
+return
+label IF_END6
+label IF_END5
+label IF_FALSE4
+push pointer 0
+push argument 2
+call Mouse.blockMovedCat 2
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push argument 2
+call Cat.canMove 1
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
+push constant 0
+not
+pop this 4
+push argument 2
+push constant 0
+not
+call Cat.setPushedByMouse 2
+pop temp 0
+push constant 0
+not
+return
+goto IF_END8
+label IF_FALSE8
+push argument 2
+call Cat.getStatus 1
+push static 6
+eq
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
+push constant 0
+not
+pop this 4
+push argument 2
+call Cat.setSquashedToTrue 1
+pop temp 0
+push constant 0
+not
+return
+goto IF_END9
+label IF_FALSE9
+push constant 0
+return
+label IF_END9
+label IF_END8
+label IF_FALSE7
+push constant 0
+not
+pop this 4
+label IF_FALSE1
+push constant 0
+not
+return
+function Mouse.canMoveRightwards 0
+push argument 0
+pop pointer 0
+push this 0
 push constant 496
 eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 0
+push constant 16
+add
+push this 1
+call Block.blockInLocation 2
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 0
+push constant 32
+add
+pop this 2
+push this 2
+push constant 496
+gt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+return
+label IF_FALSE2
+label WHILE_EXP0
+push this 2
+push this 1
+call Block.blockInLocation 2
+not
+if-goto WHILE_END0
+push this 2
+push constant 16
+add
+pop this 2
+push this 2
+push constant 496
+gt
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push constant 0
+return
+label IF_FALSE3
+goto WHILE_EXP0
+label WHILE_END0
+push pointer 0
+push argument 1
+call Mouse.blockMovedCat 2
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push argument 1
+call Cat.canMove 1
 if-goto IF_TRUE5
 goto IF_FALSE5
 label IF_TRUE5
-push constant 2
-neg
+push constant 0
+not
+pop this 4
+push argument 1
+push constant 0
+not
+call Cat.setPushedByMouse 2
+pop temp 0
+push constant 0
+not
 return
+goto IF_END5
 label IF_FALSE5
-push pointer 0
-call Mouse.catCantMoveRight 1
+push argument 1
+call Cat.getStatus 1
+push static 6
+eq
 if-goto IF_TRUE6
 goto IF_FALSE6
 label IF_TRUE6
-push constant 2
-neg
+push constant 0
+not
+pop this 4
+push argument 1
+call Cat.setSquashedToTrue 1
+pop temp 0
+push constant 0
+not
 return
+goto IF_END6
 label IF_FALSE6
+push constant 0
+return
+label IF_END6
+label IF_END5
 label IF_FALSE4
-push this 2
+push pointer 0
+push argument 2
+call Mouse.blockMovedCat 2
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push argument 2
+call Cat.canMove 1
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
+push constant 0
+not
+pop this 4
+push argument 2
+push constant 0
+not
+call Cat.setPushedByMouse 2
+pop temp 0
+push constant 0
+not
 return
-label IF_FALSE3
-push constant 2
-neg
+goto IF_END8
+label IF_FALSE8
+push argument 2
+call Cat.getStatus 1
+push static 6
+eq
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
+push constant 0
+not
+pop this 4
+push argument 2
+call Cat.setSquashedToTrue 1
+pop temp 0
+push constant 0
+not
 return
-goto IF_END1
+goto IF_END9
+label IF_FALSE9
+push constant 0
+return
+label IF_END9
+label IF_END8
+label IF_FALSE7
+push constant 0
+not
+pop this 4
 label IF_FALSE1
-push constant 1
-neg
+push constant 0
+not
 return
-label IF_END1
 function Mouse.draw 1
 push argument 0
 pop pointer 0
-push constant 16384
+push static 5
 push constant 32
 push this 1
 call Math.multiply 2
@@ -876,56 +801,17 @@ call Screen.drawRectangle 4
 pop temp 0
 push constant 0
 return
-function Mouse.blockMovedCat 1
+function Mouse.blockMovedCat 0
 push argument 0
 pop pointer 0
-push this 5
+push this 6
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push constant 16384
-push constant 32
-push this 3
-push constant 4
-add
-call Math.multiply 2
-add
+push argument 1
 push this 0
-push constant 16
-call Math.divide 2
-add
-pop local 0
-goto IF_END0
-label IF_FALSE0
-push constant 16384
-push constant 32
-push this 1
-push constant 4
-add
-call Math.multiply 2
-add
-push this 2
-push constant 16
-call Math.divide 2
-add
-pop local 0
-label IF_END0
-push local 0
-call Memory.peek 1
-push constant 32255
-neg
-eq
-push local 0
-call Memory.peek 1
-push constant 32256
-neg
-eq
-or
-push local 0
-call Memory.peek 1
-push constant 16382
-eq
-or
+push this 3
+call Cat.inLocation 3
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
@@ -933,6 +819,20 @@ push constant 0
 not
 return
 label IF_FALSE1
+push constant 0
+return
+label IF_FALSE0
+push argument 1
+push this 2
+push this 1
+call Cat.inLocation 3
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+not
+return
+label IF_FALSE2
 push constant 0
 return
 function Mouse.pushedBlock 0
@@ -947,7 +847,7 @@ push constant 0
 not
 call Screen.setColor 1
 pop temp 0
-push this 5
+push this 6
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
@@ -990,6 +890,8 @@ pop pointer 0
 push constant 0
 pop this 4
 push constant 0
+pop this 6
+push constant 0
 pop this 5
 push argument 1
 push static 0
@@ -999,9 +901,11 @@ goto IF_FALSE0
 label IF_TRUE0
 push constant 0
 not
-pop this 5
+pop this 6
 push pointer 0
-call Mouse.moveUp 1
+push argument 2
+push argument 3
+call Mouse.moveUp 3
 pop temp 0
 push constant 0
 return
@@ -1014,9 +918,11 @@ goto IF_FALSE1
 label IF_TRUE1
 push constant 0
 not
-pop this 5
+pop this 6
 push pointer 0
-call Mouse.moveDown 1
+push argument 2
+push argument 3
+call Mouse.moveDown 3
 pop temp 0
 push constant 0
 return
@@ -1028,7 +934,9 @@ if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
 push pointer 0
-call Mouse.moveLeft 1
+push argument 2
+push argument 3
+call Mouse.moveLeft 3
 pop temp 0
 push constant 0
 return
@@ -1040,7 +948,9 @@ if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
 push pointer 0
-call Mouse.moveRight 1
+push argument 2
+push argument 3
+call Mouse.moveRight 3
 pop temp 0
 push constant 0
 return
@@ -1050,29 +960,13 @@ return
 function Mouse.moveUp 0
 push argument 0
 pop pointer 0
-push constant 0
-pop this 4
 push pointer 0
-call Mouse.canMoveUpwards 1
-pop this 3
-push this 3
-push constant 2
-neg
-gt
+push argument 1
+push argument 2
+call Mouse.canMoveUpwards 3
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push this 3
-push constant 1
-neg
-gt
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
-not
-pop this 4
-label IF_FALSE1
 push pointer 0
 call Mouse.erase 1
 pop temp 0
@@ -1080,38 +974,19 @@ push this 1
 push constant 16
 sub
 pop this 1
-push pointer 0
-call Mouse.draw 1
-pop temp 0
 label IF_FALSE0
 push constant 0
 return
 function Mouse.moveDown 0
 push argument 0
 pop pointer 0
-push constant 0
-pop this 4
 push pointer 0
-call Mouse.canMoveDownwards 1
-pop this 3
-push this 3
-push constant 2
-neg
-gt
+push argument 1
+push argument 2
+call Mouse.canMoveDownwards 3
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push this 3
-push constant 1
-neg
-gt
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
-not
-pop this 4
-label IF_FALSE1
 push pointer 0
 call Mouse.erase 1
 pop temp 0
@@ -1119,38 +994,19 @@ push this 1
 push constant 16
 add
 pop this 1
-push pointer 0
-call Mouse.draw 1
-pop temp 0
 label IF_FALSE0
 push constant 0
 return
 function Mouse.moveLeft 0
 push argument 0
 pop pointer 0
-push constant 0
-pop this 4
 push pointer 0
-call Mouse.canMoveLeftwards 1
-pop this 2
-push this 2
-push constant 2
-neg
-gt
+push argument 1
+push argument 2
+call Mouse.canMoveLeftwards 3
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push this 2
-push constant 1
-neg
-gt
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
-not
-pop this 4
-label IF_FALSE1
 push pointer 0
 call Mouse.erase 1
 pop temp 0
@@ -1158,38 +1014,19 @@ push this 0
 push constant 16
 sub
 pop this 0
-push pointer 0
-call Mouse.draw 1
-pop temp 0
 label IF_FALSE0
 push constant 0
 return
 function Mouse.moveRight 0
 push argument 0
 pop pointer 0
-push constant 0
-pop this 4
 push pointer 0
-call Mouse.canMoveRightwards 1
-pop this 2
-push this 2
-push constant 2
-neg
-gt
+push argument 1
+push argument 2
+call Mouse.canMoveRightwards 3
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push this 2
-push constant 1
-neg
-gt
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
-not
-pop this 4
-label IF_FALSE1
 push pointer 0
 call Mouse.erase 1
 pop temp 0
@@ -1197,9 +1034,6 @@ push this 0
 push constant 16
 add
 pop this 0
-push pointer 0
-call Mouse.draw 1
-pop temp 0
 label IF_FALSE0
 push constant 0
 return

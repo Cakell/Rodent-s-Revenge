@@ -5,10 +5,14 @@ push constant 1
 pop static 1
 push constant 2
 pop static 2
+push constant 16
+pop static 3
+push constant 16384
+pop static 4
 push constant 0
 return
 function Cat.new 0
-push constant 4
+push constant 6
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -18,9 +22,9 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push constant 0
-pop this 0
-push constant 0
 pop this 1
+push constant 0
+pop this 2
 label IF_FALSE0
 push argument 0
 push constant 1
@@ -29,14 +33,18 @@ if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
 push constant 496
-pop this 0
-push constant 240
 pop this 1
-label IF_FALSE1
-push constant 15
+push constant 240
 pop this 2
+label IF_FALSE1
+push argument 0
+pop this 0
 push constant 0
 pop this 3
+push constant 0
+pop this 4
+push constant 0
+pop this 5
 push pointer 0
 call Cat.drawStanding 1
 pop temp 0
@@ -45,20 +53,31 @@ return
 function Cat.dispose 0
 push argument 0
 pop pointer 0
+push constant 1
+neg
+pop this 1
+push constant 1
+neg
+pop this 2
 push pointer 0
 call Memory.deAlloc 1
 pop temp 0
 push constant 0
 return
-function Cat.getX 0
+function Cat.getID 0
 push argument 0
 pop pointer 0
 push this 0
 return
-function Cat.getY 0
+function Cat.getX 0
 push argument 0
 pop pointer 0
 push this 1
+return
+function Cat.getY 0
+push argument 0
+pop pointer 0
+push this 2
 return
 function Cat.getStatus 0
 push argument 0
@@ -72,419 +91,40 @@ push argument 1
 pop this 3
 push constant 0
 return
-function Cat.canMoveDownLeft 2
+function Cat.getPushedByMouse 0
 push argument 0
 pop pointer 0
-push this 0
-push constant 16
-lt
-push this 1
-push constant 239
-gt
-or
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
+push this 4
+return
+function Cat.setPushedByMouse 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 4
 push constant 0
 return
-label IF_FALSE0
-push constant 16384
-push constant 32
-push this 1
-push constant 16
-add
-call Math.multiply 2
-add
-push this 0
-push constant 16
-sub
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
+function Cat.getSquashed 0
+push argument 0
+pop pointer 0
+push this 5
 return
-label IF_FALSE1
+function Cat.setSquashedToTrue 0
+push argument 0
+pop pointer 0
 push constant 0
 not
-return
-function Cat.canMoveDownRight 2
-push argument 0
-pop pointer 0
-push this 0
-push constant 495
-gt
-push this 1
-push constant 239
-gt
-or
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-return
-label IF_FALSE0
-push constant 16384
-push constant 32
-push this 1
-push constant 16
-add
-call Math.multiply 2
-add
-push this 0
-push constant 16
-add
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
-return
-label IF_FALSE1
-push constant 0
-not
-return
-function Cat.canMoveUpLeft 2
-push argument 0
-pop pointer 0
-push this 0
-push constant 16
-lt
-push this 1
-push constant 16
-lt
-or
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-return
-label IF_FALSE0
-push constant 16384
-push constant 32
-push this 1
-push constant 16
-sub
-call Math.multiply 2
-add
-push this 0
-push constant 16
-sub
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
-return
-label IF_FALSE1
-push constant 0
-not
-return
-function Cat.canMoveUpRight 2
-push argument 0
-pop pointer 0
-push this 0
-push constant 495
-gt
-push this 1
-push constant 16
-lt
-or
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-return
-label IF_FALSE0
-push constant 16384
-push constant 32
-push this 1
-push constant 16
-sub
-call Math.multiply 2
-add
-push this 0
-push constant 16
-add
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
-return
-label IF_FALSE1
-push constant 0
-not
-return
-function Cat.canMoveUp 2
-push argument 0
-pop pointer 0
-push this 1
-push constant 16
-lt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-return
-label IF_FALSE0
-push constant 16384
-push constant 32
-push this 1
-push constant 16
-sub
-call Math.multiply 2
-add
-push this 0
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
-return
-label IF_FALSE1
-push constant 0
-not
-return
-function Cat.canMoveDown 2
-push argument 0
-pop pointer 0
-push this 1
-push constant 239
-gt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-return
-label IF_FALSE0
-push constant 16384
-push constant 32
-push this 1
-push constant 16
-add
-call Math.multiply 2
-add
-push this 0
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
-return
-label IF_FALSE1
-push constant 0
-not
-return
-function Cat.canMoveLeft 2
-push argument 0
-pop pointer 0
-push this 0
-push constant 16
-lt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-return
-label IF_FALSE0
-push constant 16384
-push constant 32
-push this 1
-call Math.multiply 2
-add
-push this 0
-push constant 16
-sub
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
-return
-label IF_FALSE1
-push constant 0
-not
-return
-function Cat.canMoveRight 2
-push argument 0
-pop pointer 0
-push this 0
-push constant 495
-gt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-return
-label IF_FALSE0
-push constant 16384
-push constant 32
-push this 1
-call Math.multiply 2
-add
-push this 0
-push constant 16
-add
-push constant 16
-call Math.divide 2
-add
-pop local 0
-push local 0
-call Memory.peek 1
-push constant 1
-neg
-eq
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push constant 0
-return
-label IF_FALSE1
-push constant 0
-not
-return
-function Cat.canMove 0
-push argument 0
-pop pointer 0
-push pointer 0
-call Cat.canMoveDownLeft 1
-push pointer 0
-call Cat.canMoveDownRight 1
-or
-push pointer 0
-call Cat.canMoveUpLeft 1
-or
-push pointer 0
-call Cat.canMoveUpRight 1
-or
-push pointer 0
-call Cat.canMoveUp 1
-or
-push pointer 0
-call Cat.canMoveDown 1
-or
-push pointer 0
-call Cat.canMoveLeft 1
-or
-push pointer 0
-call Cat.canMoveRight 1
-or
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push constant 0
-not
-return
-label IF_FALSE0
-push constant 0
-return
-function Cat.draw 0
-push argument 0
-pop pointer 0
-push this 3
-push static 0
-eq
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push pointer 0
-call Cat.drawStanding 1
-pop temp 0
-push constant 0
-return
-label IF_FALSE0
-push this 3
-push static 1
-eq
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push pointer 0
-call Cat.drawSitting 1
-pop temp 0
-push constant 0
-return
-label IF_FALSE1
-push this 3
-push static 2
-eq
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
-push pointer 0
-call Cat.drawCheese 1
-pop temp 0
-push constant 0
-return
-label IF_FALSE2
+pop this 5
 push constant 0
 return
 function Cat.drawStanding 1
 push argument 0
 pop pointer 0
-push constant 16384
+push static 4
 push constant 32
-push this 1
+push this 2
 call Math.multiply 2
 add
-push this 0
+push this 1
 push constant 16
 call Math.divide 2
 add
@@ -596,12 +236,12 @@ return
 function Cat.drawSitting 1
 push argument 0
 pop pointer 0
-push constant 16384
+push static 4
 push constant 32
-push this 1
+push this 2
 call Math.multiply 2
 add
-push this 0
+push this 1
 push constant 16
 call Math.divide 2
 add
@@ -713,12 +353,12 @@ return
 function Cat.drawCheese 1
 push argument 0
 pop pointer 0
-push constant 16384
+push static 4
 push constant 32
-push this 1
+push this 2
 call Math.multiply 2
 add
-push this 0
+push this 1
 push constant 16
 call Math.divide 2
 add
@@ -821,155 +461,625 @@ call Memory.poke 2
 pop temp 0
 push constant 0
 return
+function Cat.draw 0
+push argument 0
+pop pointer 0
+push this 3
+push static 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Cat.drawStanding 1
+pop temp 0
+push constant 0
+return
+label IF_FALSE0
+push this 3
+push static 1
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+call Cat.drawSitting 1
+pop temp 0
+push constant 0
+return
+label IF_FALSE1
+push this 3
+push static 2
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+call Cat.drawCheese 1
+pop temp 0
+push constant 0
+return
+label IF_FALSE2
+push constant 0
+return
 function Cat.erase 0
 push argument 0
 pop pointer 0
 push constant 0
 call Screen.setColor 1
 pop temp 0
-push this 0
-push this 1
-push this 0
-push this 2
-add
 push this 1
 push this 2
+push this 1
+push static 3
 add
+push constant 1
+sub
+push this 2
+push static 3
+add
+push constant 1
+sub
 call Screen.drawRectangle 4
 pop temp 0
+push constant 0
+return
+function Cat.inLocation 0
+push argument 0
+pop pointer 0
+push this 1
+push argument 1
+eq
+push this 2
+push argument 2
+eq
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+label IF_FALSE0
+push constant 0
+return
+function Cat.standingCatInLocation 1
+push static 4
+push constant 32
+push argument 1
+push constant 4
+add
+call Math.multiply 2
+add
+push argument 0
+push constant 16
+call Math.divide 2
+add
+pop local 0
+push local 0
+call Memory.peek 1
+push constant 32255
+neg
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+label IF_FALSE0
+push constant 0
+return
+function Cat.catInLocation 1
+push static 4
+push constant 32
+push argument 1
+push constant 4
+add
+call Math.multiply 2
+add
+push argument 0
+push constant 16
+call Math.divide 2
+add
+pop local 0
+push local 0
+call Memory.peek 1
+push constant 32255
+neg
+eq
+push local 0
+call Memory.peek 1
+push constant 32256
+neg
+eq
+or
+push local 0
+call Memory.peek 1
+push constant 16382
+eq
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+label IF_FALSE0
+push constant 0
+return
+function Cat.canMoveDownLeft 0
+push argument 0
+pop pointer 0
+push this 1
+push constant 0
+eq
+push this 2
+push constant 240
+eq
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 1
+push constant 16
+sub
+push this 2
+push constant 16
+add
+call Block.blockInLocation 2
+push this 1
+push constant 16
+sub
+push this 2
+push constant 16
+add
+call Cat.catInLocation 2
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push constant 0
+not
+return
+function Cat.canMoveDownRight 0
+push argument 0
+pop pointer 0
+push this 1
+push constant 496
+eq
+push this 2
+push constant 240
+eq
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 1
+push constant 16
+add
+push this 2
+push constant 16
+add
+call Block.blockInLocation 2
+push this 1
+push constant 16
+add
+push this 2
+push constant 16
+add
+call Cat.catInLocation 2
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push constant 0
+not
+return
+function Cat.canMoveUpLeft 0
+push argument 0
+pop pointer 0
+push this 1
+push constant 0
+eq
+push this 2
+push constant 0
+eq
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 1
+push constant 16
+sub
+push this 2
+push constant 16
+sub
+call Block.blockInLocation 2
+push this 1
+push constant 16
+sub
+push this 2
+push constant 16
+sub
+call Cat.catInLocation 2
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push constant 0
+not
+return
+function Cat.canMoveUpRight 0
+push argument 0
+pop pointer 0
+push this 1
+push constant 496
+eq
+push this 2
+push constant 0
+eq
+or
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 1
+push constant 16
+add
+push this 2
+push constant 16
+sub
+call Block.blockInLocation 2
+push this 1
+push constant 16
+add
+push this 2
+push constant 16
+sub
+call Cat.catInLocation 2
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push constant 0
+not
+return
+function Cat.canMoveUp 0
+push argument 0
+pop pointer 0
+push this 2
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 1
+push this 2
+push constant 16
+sub
+call Block.blockInLocation 2
+push this 1
+push this 2
+push constant 16
+sub
+call Cat.catInLocation 2
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push constant 0
+not
+return
+function Cat.canMoveDown 0
+push argument 0
+pop pointer 0
+push this 2
+push constant 240
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 1
+push this 2
+push constant 16
+add
+call Block.blockInLocation 2
+push this 1
+push this 2
+push constant 16
+add
+call Cat.catInLocation 2
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push constant 0
+not
+return
+function Cat.canMoveLeft 0
+push argument 0
+pop pointer 0
+push this 1
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 1
+push constant 16
+sub
+push this 2
+call Block.blockInLocation 2
+push this 1
+push constant 16
+sub
+push this 2
+call Cat.catInLocation 2
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push constant 0
+not
+return
+function Cat.canMoveRight 0
+push argument 0
+pop pointer 0
+push this 1
+push constant 496
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 1
+push constant 16
+add
+push this 2
+call Block.blockInLocation 2
+push this 1
+push constant 16
+add
+push this 2
+call Cat.catInLocation 2
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+return
+label IF_FALSE1
+push constant 0
+not
+return
+function Cat.canMove 0
+push argument 0
+pop pointer 0
+push this 3
+push static 2
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push pointer 0
+call Cat.canMoveDownLeft 1
+push pointer 0
+call Cat.canMoveDownRight 1
+or
+push pointer 0
+call Cat.canMoveUpLeft 1
+or
+push pointer 0
+call Cat.canMoveUpRight 1
+or
+push pointer 0
+call Cat.canMoveUp 1
+or
+push pointer 0
+call Cat.canMoveDown 1
+or
+push pointer 0
+call Cat.canMoveLeft 1
+or
+push pointer 0
+call Cat.canMoveRight 1
+or
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+not
+return
+label IF_FALSE1
 push constant 0
 return
 function Cat.move 0
 push argument 0
 pop pointer 0
-push argument 1
-push this 0
-gt
-push argument 2
-push this 1
-gt
-and
+push pointer 0
+call Cat.canMove 1
+not
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push pointer 0
-call Cat.moveTowardsMouseDownRight 1
-pop temp 0
 push constant 0
 return
 label IF_FALSE0
 push argument 1
-push this 0
+push this 1
 gt
 push argument 2
-push this 1
-eq
+push this 2
+gt
 and
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
 push pointer 0
-call Cat.moveTowardsMouseRight 1
+call Cat.moveTowardsMouseDownRight 1
 pop temp 0
 push constant 0
 return
 label IF_FALSE1
 push argument 1
-push this 0
+push this 1
 gt
 push argument 2
-push this 1
-lt
+push this 2
+eq
 and
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
 push pointer 0
-call Cat.moveTowardsMouseUpRight 1
+call Cat.moveTowardsMouseRight 1
 pop temp 0
 push constant 0
 return
 label IF_FALSE2
 push argument 1
-push this 0
-eq
-push argument 2
 push this 1
 gt
+push argument 2
+push this 2
+lt
 and
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
 push pointer 0
-call Cat.moveTowardsMouseDown 1
+call Cat.moveTowardsMouseUpRight 1
 pop temp 0
 push constant 0
 return
 label IF_FALSE3
 push argument 1
-push this 0
+push this 1
 eq
 push argument 2
-push this 1
-lt
+push this 2
+gt
 and
 if-goto IF_TRUE4
 goto IF_FALSE4
 label IF_TRUE4
 push pointer 0
-call Cat.moveTowardsMouseUp 1
+call Cat.moveTowardsMouseDown 1
 pop temp 0
 push constant 0
 return
 label IF_FALSE4
 push argument 1
-push this 0
-lt
-push argument 2
 push this 1
-gt
+eq
+push argument 2
+push this 2
+lt
 and
 if-goto IF_TRUE5
 goto IF_FALSE5
 label IF_TRUE5
 push pointer 0
-call Cat.moveTowardsMouseDownLeft 1
+call Cat.moveTowardsMouseUp 1
 pop temp 0
 push constant 0
 return
 label IF_FALSE5
 push argument 1
-push this 0
+push this 1
 lt
 push argument 2
-push this 1
-eq
+push this 2
+gt
 and
 if-goto IF_TRUE6
 goto IF_FALSE6
 label IF_TRUE6
 push pointer 0
-call Cat.moveTowardsMouseLeft 1
+call Cat.moveTowardsMouseDownLeft 1
 pop temp 0
 push constant 0
 return
 label IF_FALSE6
 push argument 1
-push this 0
-lt
-push argument 2
 push this 1
 lt
+push argument 2
+push this 2
+eq
 and
 if-goto IF_TRUE7
 goto IF_FALSE7
 label IF_TRUE7
 push pointer 0
-call Cat.moveTowardsMouseUpLeft 1
+call Cat.moveTowardsMouseLeft 1
 pop temp 0
 push constant 0
 return
 label IF_FALSE7
+push argument 1
+push this 1
+lt
+push argument 2
+push this 2
+lt
+and
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
+push pointer 0
+call Cat.moveTowardsMouseUpLeft 1
+pop temp 0
+push constant 0
+return
+label IF_FALSE8
 push constant 0
 return
 function Cat.moveTowardsMouseDownLeft 0
@@ -1722,14 +1832,14 @@ pop pointer 0
 push pointer 0
 call Cat.erase 1
 pop temp 0
-push this 0
-push constant 16
-sub
-pop this 0
 push this 1
 push constant 16
-add
+sub
 pop this 1
+push this 2
+push constant 16
+add
+pop this 2
 push pointer 0
 call Cat.draw 1
 pop temp 0
@@ -1741,14 +1851,14 @@ pop pointer 0
 push pointer 0
 call Cat.erase 1
 pop temp 0
-push this 0
-push constant 16
-add
-pop this 0
 push this 1
 push constant 16
 add
 pop this 1
+push this 2
+push constant 16
+add
+pop this 2
 push pointer 0
 call Cat.draw 1
 pop temp 0
@@ -1760,14 +1870,14 @@ pop pointer 0
 push pointer 0
 call Cat.erase 1
 pop temp 0
-push this 0
-push constant 16
-sub
-pop this 0
 push this 1
 push constant 16
 sub
 pop this 1
+push this 2
+push constant 16
+sub
+pop this 2
 push pointer 0
 call Cat.draw 1
 pop temp 0
@@ -1779,14 +1889,14 @@ pop pointer 0
 push pointer 0
 call Cat.erase 1
 pop temp 0
-push this 0
-push constant 16
-add
-pop this 0
 push this 1
 push constant 16
-sub
+add
 pop this 1
+push this 2
+push constant 16
+sub
+pop this 2
 push pointer 0
 call Cat.draw 1
 pop temp 0
@@ -1798,10 +1908,10 @@ pop pointer 0
 push pointer 0
 call Cat.erase 1
 pop temp 0
-push this 1
+push this 2
 push constant 16
 sub
-pop this 1
+pop this 2
 push pointer 0
 call Cat.draw 1
 pop temp 0
@@ -1813,10 +1923,10 @@ pop pointer 0
 push pointer 0
 call Cat.erase 1
 pop temp 0
-push this 1
+push this 2
 push constant 16
 add
-pop this 1
+pop this 2
 push pointer 0
 call Cat.draw 1
 pop temp 0
@@ -1828,10 +1938,10 @@ pop pointer 0
 push pointer 0
 call Cat.erase 1
 pop temp 0
-push this 0
+push this 1
 push constant 16
 sub
-pop this 0
+pop this 1
 push pointer 0
 call Cat.draw 1
 pop temp 0
@@ -1843,10 +1953,10 @@ pop pointer 0
 push pointer 0
 call Cat.erase 1
 pop temp 0
-push this 0
+push this 1
 push constant 16
 add
-pop this 0
+pop this 1
 push pointer 0
 call Cat.draw 1
 pop temp 0

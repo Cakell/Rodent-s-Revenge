@@ -3,17 +3,23 @@
 /** Implements a cat in the Rodent's Revenge game. */
 class Cat {
 
-	static int STANDING, SITTING, CHEESE;
+	static int STANDING, SITTING, CHEESE;	// Enums for the cat's status.
+	static int BLOCK_SIZE;					// size of a game block's edge, in pixels
+	static int SCREEN_BASE_ADDRESS;			// base address of the Hack-platform's screen
 
-	field int x, y;		// screen location of the cat's top-left corner
-	field int size;		// size of a game block's edge, in pixels
-	field int status;	// 0 = STANDING, 1 = SITTING, 2 = CHEESE
+	field int id;							// ID of the cat
+	field int x, y;							// screen location of the cat's top-left corner
+	field int status;						// 0 = STANDING, 1 = SITTING, 2 = CHEESE
+	field boolean pushedByMouse;			// true if the mouse's last movement pushed the cat.
+	field boolean squashed;					// true if the mouse has squashed the cheese-turned cat.
 
 	/** Initializes the static variables. */
 	function void init() {
 		let STANDING = 0;
 		let SITTING = 1;
 		let CHEESE = 2;
+		let BLOCK_SIZE = 16;
+		let SCREEN_BASE_ADDRESS = 16384;
 		return; 
 	}
 
@@ -27,16 +33,25 @@ class Cat {
 			let x = 496;
 			let y = 240;
 		}
-		let size = 15;
+		let id = index;
 		let status = 0;
+		let pushedByMouse = false;
+		let squashed = false;
 		do drawStanding();
 		return this;
 	}
 
 	/** Disposes this cat. */
 	method void dispose() {
+		let x = -1;
+		let y = -1;
 		do Memory.deAlloc(this);
 		return;
+	}
+	
+	/** Gets the ID of the cat. */
+	method int getID() {
+		return id;
 	}
 
 	/** Gets the x coordinate of the cat. */
@@ -59,163 +74,36 @@ class Cat {
 		let status = newStatus;
 		return;
 	}
-
-	/** Checks if the cat can move down-left (diagonally).
-		Returns false if the cat is in a leftmost or bottommost cell,
-		or if there is a game block to its lower-left.
-		Returns true otherwise.			*/
-   method int canMoveDownLeft() {
-      var int memAddress, blockXCord;
-	  if ((x < 16) | (y > 239)) {
-	      return false;
-	  }
-	  let memAddress = 16384 + (32 * (y + 16)) + Math.divide(x - 16, 16);
-	  if (Memory.peek(memAddress) = -1) {
-          return false;
-      }
-	  return true;
-   }
-   
-   /** Checks if the cat can move down-left (diagonally).
-       Returns false if the cat is in a rightmost or bottommost cell,
-	   or if there is a game block on its lower-right.
-	   Returns true otherwise.			*/
-	method int canMoveDownRight() {
-		var int memAddress, blockXCord;
-		if ((x > 495) | (y > 239)) {
-			return false;
-		}
-		let memAddress = 16384 + (32 * (y + 16)) + Math.divide(x + 16, 16);
-		if (Memory.peek(memAddress) = -1) {
-			return false;
-		}
-		return true;
+	
+	/** Gets the value of the field 'pushedByMouse'.
+		i.e. returns true only if the mouse's last movement pushed the cat.		*/
+	method boolean getPushedByMouse() {
+		return pushedByMouse;
 	}
 
-	/** Checks if the cat can move up-left (diagonally).
-		Returns false if the cat is in a leftmost or topmost cell,
-		or if there is a game block to its upper-left.
-		Returns true otherwise.			*/
-	method int canMoveUpLeft() {
-		var int memAddress, blockXCord;
-		if ((x < 16) | (y < 16)) {
-			return false;
-		}
-		let memAddress = 16384 + (32 * (y - 16)) + Math.divide(x - 16, 16);
-		if (Memory.peek(memAddress) = -1) {
-			return false;
-		}
-		return true;
+	/** Sets the value of the field 'pushedByMouse'.		*/
+	method void setPushedByMouse(boolean pushedByMouseValue) {
+		let pushedByMouse = pushedByMouseValue;
+		return;
 	}
-
-	/** Checks if the cat can move up-left (diagonally).
-		Returns false if the cat is in a rightmost or topmost cell,
-		or if there is a game block on its upper-right.
-		Returns true otherwise.			*/
-	method int canMoveUpRight() {
-		var int memAddress, blockXCord;
-		if ((x > 495) | (y < 16)) {
-			return false;
-		}
-		let memAddress = 16384 + (32 * (y - 16)) + Math.divide(x + 16, 16);
-		if (Memory.peek(memAddress) = -1) {
-			return false;
-		}
-		return true;
+	
+	/** Gets the value of the field 'squashed'.
+		i.e. returns true only if the mouse has squashed
+		the cat after it has turned into cheese.			*/
+	method boolean getSquashed() {
+		return squashed;
 	}
-
-	/** Checks if the cat can move up.
-		Returns false if the cat is in a upmost cell or if there is
-		a game block above it. Returns true otherwise.		*/
-	method int canMoveUp() {
-		var int memAddress, blockXCord;
-		if (y < 16) {
-			return false;
-		}
-		let memAddress = 16384 + (32 * (y - 16)) + Math.divide(x, 16);
-		if (Memory.peek(memAddress) = -1) {
-			return false;
-		}
-		return true;
-	}
-
-	/** Checks if the cat can move down.
-		Returns false if the cat is in a downmost cell or if there is
-		a game block below it. Returns true otherwise.		*/
-	method int canMoveDown() {
-		var int memAddress, blockXCord;
-		if (y > 239) {
-			return false;
-		}
-		let memAddress = 16384 + (32 * (y + 16)) + Math.divide(x, 16);
-		if (Memory.peek(memAddress) = -1) {
-			return false;
-		}
-		return true;
-	}
-
-	/** Checks if the cat can move left.
-		Returns false if the cat is in a leftmost cell or if there is
-		a game block on its left. Returns true otherwise.	*/
-	method int canMoveLeft() {
-		var int memAddress, blockXCord;
-		if (x < 16) {
-			return false;
-		}
-		let memAddress = 16384 + (32 * y) + Math.divide(x - 16, 16);
-		if (Memory.peek(memAddress) = -1) {
-			return false;
-		}
-		return true;
-	}
-
-	/** Checks if the cat can move right.
-		Returns false if the cat is in a rightmost cell or if there is
-		a game block on its right. Returns true otherwise.	*/
-	method int canMoveRight() {
-		var int memAddress, blockXCord;
-		if (x > 495) {
-			return false;
-		}
-		let memAddress = 16384 + (32 * y) + Math.divide(x + 16, 16);
-		if (Memory.peek(memAddress) = -1) {
-			return false;
-		}
-		return true;
-	}
-
-	/** Returns true if the cat can move. */
-	method boolean canMove() {
-
-		if (canMoveDownLeft() | canMoveDownRight() |  canMoveUpLeft() |
-			canMoveUpRight() | canMoveUp() | canMoveDown() |
-			canMoveLeft() | canMoveRight()) {
-				return true;
-		}
-		return false;
-	}
-
-	/** Draws the cat on the screen. */
-	method void draw() {
-		if (status = STANDING) {
-			do drawStanding();
-			return;
-		}
-		if (status = SITTING) {
-			do drawSitting();
-			return;
-		}
-		if (status = CHEESE) {
-			do drawCheese();
-			return;
-		}
+	
+	/** Sets the value of the field 'squashed' to true (its value can't be set back to false).	*/
+	method void setSquashedToTrue() {
+		let squashed = true;
 		return;
 	}
 
-	/** Draws on the screen the cat while it is standing. */
+	/** Draws on the screen the cat while it is standing.	*/
 	method void drawStanding() {
 		var int memAddress;
-		let memAddress = 16384 + (32 * y) + Math.divide(x, 16);
+		let memAddress = SCREEN_BASE_ADDRESS + (32 * y) + Math.divide(x, 16);
 		do Memory.poke(memAddress+0, 1);
 		do Memory.poke(memAddress+32, 17410);
 		do Memory.poke(memAddress+64, -22014);
@@ -238,7 +126,7 @@ class Cat {
 	/** Draws on the screen the cat while it is sitting. */
 	method void drawSitting() {
 		var int memAddress;
-		let memAddress = 16384 + (32 * y) + Math.divide(x, 16);
+		let memAddress = SCREEN_BASE_ADDRESS + (32 * y) + Math.divide(x, 16);
 		do Memory.poke(memAddress+0, 0);
 		do Memory.poke(memAddress+32, 17408);
 		do Memory.poke(memAddress+64, -22016);
@@ -261,7 +149,7 @@ class Cat {
 	/** Draws on the screen the cheese that replaces a beaten cat. */
 	method void drawCheese() {
 		var int memAddress;
-		let memAddress = 16384 + (32 * y) + Math.divide(x, 16);
+		let memAddress = SCREEN_BASE_ADDRESS + (32 * y) + Math.divide(x, 16);
 		do Memory.poke(memAddress+0, 0);
 		do Memory.poke(memAddress+32, 0);
 		do Memory.poke(memAddress+64, 0);
@@ -281,15 +169,189 @@ class Cat {
 		return;
 	}
 
+	/** Draws the cat on the screen. */
+	method void draw() {
+		if (status = STANDING) {
+			do drawStanding();
+			return;
+		}
+		if (status = SITTING) {
+			do drawSitting();
+			return;
+		}
+		if (status = CHEESE) {
+			do drawCheese();
+			return;
+		}
+		return;
+	}
+
 	/** Erases the cat from the screen. */
 	method void erase() {
 		do Screen.setColor(false);
-		do Screen.drawRectangle(x, y, x + size, y + size);
+		do Screen.drawRectangle(x, y, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
 		return;
+	}
+	
+	/** Returns true if there is a standing cat in the 16x16 bitmap whose top-left is (xCoord, yCoord).
+		Retruns false otherwise. */
+	method boolean inLocation(int xCoord, int yCoord) {
+		if ((x = xCoord) & (y = yCoord)) {
+			return true;
+		}
+		return false;
+	}
+	
+	/** Returns true if there is a standing cat in the 16x16 bitmap whose top-left is (xCoord, yCoord).
+		Retruns false otherwise. */
+	function boolean standingCatInLocation(int xCoord, int yCoord) {
+		var int memAddress;
+		let memAddress = SCREEN_BASE_ADDRESS + (32 * (yCoord + 4)) + Math.divide(xCoord, 16);
+		if (Memory.peek(memAddress) = -32255) {
+			return true;
+		}
+		return false;
+	}
+	
+	/** Returns true if there is a cat in the 16x16 bitmap whose top-left is (xCoord, yCoord).
+		Retruns false otherwise. */
+	function boolean catInLocation(int xCoord, int yCoord) {
+		var int memAddress;
+		let memAddress = SCREEN_BASE_ADDRESS + (32 * (yCoord + 4)) + Math.divide(xCoord, 16);
+		if ((Memory.peek(memAddress) = -32255) |
+			(Memory.peek(memAddress) = -32256) |
+			(Memory.peek(memAddress) = 16382)) {
+			return true;
+		}
+		return false;
+	}
+
+	/** Checks if the cat can move down-left (diagonally).
+		Returns false if the cat is in a leftmost or bottommost cell,
+		or if there is a game block to its lower-left.
+		Returns true otherwise.			*/
+	method int canMoveDownLeft() {
+		if ((x = 0) | (y = 240)) {
+			return false;
+		}
+		if (Block.blockInLocation(x - 16, y + 16) | Cat.catInLocation(x - 16, y + 16)) {
+			return false;
+		}
+		return true;
+   }
+   
+   /** Checks if the cat can move down-left (diagonally).
+       Returns false if the cat is in a rightmost or bottommost cell,
+	   or if there is a game block on its lower-right.
+	   Returns true otherwise.			*/
+	method int canMoveDownRight() {
+		if ((x = 496) | (y = 240)) {
+			return false;
+		}
+		if (Block.blockInLocation(x + 16, y + 16) | Cat.catInLocation(x + 16, y + 16)) {
+			return false;
+		}
+		return true;
+	}
+
+	/** Checks if the cat can move up-left (diagonally).
+		Returns false if the cat is in a leftmost or topmost cell,
+		or if there is a game block to its upper-left.
+		Returns true otherwise.			*/
+	method int canMoveUpLeft() {
+		if ((x = 0) | (y = 0)) {
+			return false;
+		}
+		if (Block.blockInLocation(x - 16, y - 16) | Cat.catInLocation(x - 16, y - 16)) {
+			return false;
+		}
+		return true;
+	}
+
+	/** Checks if the cat can move up-left (diagonally).
+		Returns false if the cat is in a rightmost or topmost cell,
+		or if there is a game block on its upper-right.
+		Returns true otherwise.			*/
+	method int canMoveUpRight() {
+		if ((x = 496) | (y = 0)) {
+			return false;
+		}
+		if (Block.blockInLocation(x + 16, y - 16) | Cat.catInLocation(x + 16, y - 16)) {
+			return false;
+		}
+		return true;
+	}
+
+	/** Checks if the cat can move up.
+		Returns false if the cat is in a upmost cell or if there is
+		a game block above it. Returns true otherwise.		*/
+	method int canMoveUp() {
+		if (y = 0) {
+			return false;
+		}
+		if (Block.blockInLocation(x, y - 16) | Cat.catInLocation(x, y - 16)) {
+			return false;
+		}
+		return true;
+	}
+
+	/** Checks if the cat can move down.
+		Returns false if the cat is in a downmost cell or if there is
+		a game block below it. Returns true otherwise.		*/
+	method int canMoveDown() {
+		if (y = 240) {
+			return false;
+		}
+		if (Block.blockInLocation(x, y + 16) | Cat.catInLocation(x, y + 16)) {
+			return false;
+		}
+		return true;
+	}
+
+	/** Checks if the cat can move left.
+		Returns false if the cat is in a leftmost cell or if there is
+		a game block on its left. Returns true otherwise.	*/
+	method int canMoveLeft() {
+		if (x = 0) {
+			return false;
+		}
+		if (Block.blockInLocation(x - 16, y) | Cat.catInLocation(x - 16, y)) {
+			return false;
+		}
+		return true;
+	}
+
+	/** Checks if the cat can move right.
+		Returns false if the cat is in a rightmost cell or if there is
+		a game block on its right. Returns true otherwise.	*/
+	method int canMoveRight() {
+		if (x = 496) {
+			return false;
+		}
+		if (Block.blockInLocation(x + 16, y) | Cat.catInLocation(x + 16, y)) {
+			return false;
+		}
+		return true;
+	}
+
+	/** Returns true if the cat can move. */
+	method boolean canMove() {
+		if (status = CHEESE) {
+			return false;
+		}
+		if (canMoveDownLeft() | canMoveDownRight() |  canMoveUpLeft() |
+			canMoveUpRight() | canMoveUp() | canMoveDown() |
+			canMoveLeft() | canMoveRight()) {
+				return true;
+		}
+		return false;
 	}
 
 	/** Moves the cat towards the mouse by 16 pixels. */
 	method void move(int mouseXCord, int mouseYCord) {
+		if (~canMove()) {
+			return;
+		}
 		if ((mouseXCord > x) & (mouseYCord > y)) {
 			do moveTowardsMouseDownRight();
 			return;
