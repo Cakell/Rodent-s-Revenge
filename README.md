@@ -30,9 +30,12 @@ Read more about the game here: https://en.wikipedia.org/wiki/Rodent%27s_Revenge
 ## Gameplay
 The 4 arrow keys are used to move the mouse up, down, left, and right.
 When all cats are trapped, they turn into cheese.
-The game is won when the entire cheese is eaten.
+The game is won when the entire cheese is eaten (or run over by a block).
 However, if one of the cats touches the mouse, it is GAME OVER!
+
 Notice that the game speed is quite high, so be careful when you open a clear path to one of the cats.
+
+See a demo run of the game [here](https://www.youtube.com/watch?v=26VaBMpyyOQ).
 
 
 ## Remarks
