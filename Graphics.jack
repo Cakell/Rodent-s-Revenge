@@ -1,0 +1,26 @@
+
+class Graphics {
+
+    static int SCREEN_BASE_ADDRESS;
+
+    function void init() {
+        let SCREEN_BASE_ADDRESS = 16384;
+        return;
+    }
+
+    function void draw(int xIndex, int yIndex, Array bitmap) {
+
+        var int memOffset;
+        var int memAddress;
+
+        let memAddress = SCREEN_BASE_ADDRESS + (32 * yIndex) + Math.divide(xIndex, 16);
+        let memOffset = 0;
+
+        while (memOffset < 16) {
+            do Memory.poke(memAddress + (memOffset * 32), bitmap[memOffset]);
+            let memOffset = memOffset + 1;
+        }
+
+        return;
+    }
+}
