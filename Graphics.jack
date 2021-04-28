@@ -1,13 +1,17 @@
 
+/** Implements the graphics of the game's objects. */
 class Graphics {
 
     static int SCREEN_BASE_ADDRESS;
 
+    /** Initializes the static variables. */
     function void init() {
         let SCREEN_BASE_ADDRESS = 16384;
         return;
     }
 
+    /** Draws the object (whose coordinates are given by xIndex & yIndex)
+        on the screen.  */
     function void draw(int xIndex, int yIndex, Array bitmap) {
 
         var int memOffset;

@@ -33,10 +33,10 @@ class Cat {
             let y = 240;
         }
         let id = index;
-        let status = 0;
+        let status = STANDING;
         let pushedByMouse = false;
         let squashed = false;
-        do drawStanding();
+        do draw();
         return this;
     }
 
@@ -99,87 +99,18 @@ class Cat {
         return;
     }
 
-    /** Draws on the screen the cat while it is standing.   */
-    method void drawStanding() {
-        var int memAddress;
-        let memAddress = SCREEN_BASE_ADDRESS + (32 * y) + Math.divide(x, 16);
-        do Memory.poke(memAddress+0, 1);
-        do Memory.poke(memAddress+32, 17410);
-        do Memory.poke(memAddress+64, -22014);
-        do Memory.poke(memAddress+96, -17918);
-        do Memory.poke(memAddress+128, -32255);
-        do Memory.poke(memAddress+160, -21507);
-        do Memory.poke(memAddress+192, -32253);
-        do Memory.poke(memAddress+224, -28159);
-        do Memory.poke(memAddress+256, 27649);
-        do Memory.poke(memAddress+288, 4097);
-        do Memory.poke(memAddress+320, 4602);
-        do Memory.poke(memAddress+352, 9498);
-        do Memory.poke(memAddress+384, 23849);
-        do Memory.poke(memAddress+416, 21833);
-        do Memory.poke(memAddress+448, 26994);
-        do Memory.poke(memAddress+480, 3612);
-        return;
-    }
-
-    /** Draws on the screen the cat while it is sitting. */
-    method void drawSitting() {
-        var int memAddress;
-        let memAddress = SCREEN_BASE_ADDRESS + (32 * y) + Math.divide(x, 16);
-        do Memory.poke(memAddress+0, 0);
-        do Memory.poke(memAddress+32, 17408);
-        do Memory.poke(memAddress+64, -22016);
-        do Memory.poke(memAddress+96, -17920);
-        do Memory.poke(memAddress+128, -32256);
-        do Memory.poke(memAddress+160, -21512);
-        do Memory.poke(memAddress+192, -32252);
-        do Memory.poke(memAddress+224, -28158);
-        do Memory.poke(memAddress+256, 27650);
-        do Memory.poke(memAddress+288, 4099);
-        do Memory.poke(memAddress+320, 5317);
-        do Memory.poke(memAddress+352, 11529);
-        do Memory.poke(memAddress+384, 5105);
-        do Memory.poke(memAddress+416, 3074);
-        do Memory.poke(memAddress+448, 12);
-        do Memory.poke(memAddress+480, 0);
-        return;
-    }
-
-    /** Draws on the screen the cheese that replaces a beaten cat. */
-    method void drawCheese() {
-        var int memAddress;
-        let memAddress = SCREEN_BASE_ADDRESS + (32 * y) + Math.divide(x, 16);
-        do Memory.poke(memAddress+0, 0);
-        do Memory.poke(memAddress+32, 0);
-        do Memory.poke(memAddress+64, 0);
-        do Memory.poke(memAddress+96, 0);
-        do Memory.poke(memAddress+128, 16382);
-        do Memory.poke(memAddress+160, 32766);
-        do Memory.poke(memAddress+192, 32762);
-        do Memory.poke(memAddress+224, 24562);
-        do Memory.poke(memAddress+256, 20450);
-        do Memory.poke(memAddress+288, 18370);
-        do Memory.poke(memAddress+320, 9092);
-        do Memory.poke(memAddress+352, 4104);
-        do Memory.poke(memAddress+384, 2064);
-        do Memory.poke(memAddress+416, 1056);
-        do Memory.poke(memAddress+448, 960);
-        do Memory.poke(memAddress+480, 0);
-        return;
-    }
-
     /** Draws the cat on the screen. */
     method void draw() {
         if (status = STANDING) {
-            do drawStanding();
+            do CatGraphics.drawStanding(x, y);
             return;
         }
         if (status = SITTING) {
-            do drawSitting();
+            do CatGraphics.drawSitting(x, y);
             return;
         }
         if (status = CHEESE) {
-            do drawCheese();
+            do CatGraphics.drawCheese(x, y);
             return;
         }
         return;
@@ -691,7 +622,7 @@ class Cat {
         return;
     }
 
-   /** Moves the cat down & right by 16 pixels (in each direction). */
+    /** Moves the cat down & right by 16 pixels (in each direction). */
     method void moveDownRight() {
         do erase();
         let x = x + 16;

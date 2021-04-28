@@ -1,5 +1,4 @@
 
-
 /** Implements the mouse in the Rodent's Revenge game. */
 class Mouse {
 
@@ -62,7 +61,7 @@ class Mouse {
         if (Block.blockInLocation(x, y - 16)) {     // if there is a game block above the mouse.
             let blockYCord = y - 32;
             if (blockYCord < 0) {
-                    return false;
+                return false;
             }
             while (Block.blockInLocation(x, blockYCord)) {
                 let blockYCord = blockYCord - 16;
@@ -121,7 +120,7 @@ class Mouse {
         if (Block.blockInLocation(x, y + 16)) {     // if there is a game block below the mouse.
             let blockYCord = y + 32;
             if (blockYCord > 240) {
-                    return false;
+                return false;
             }
             while (Block.blockInLocation(x, blockYCord)) {
                 let blockYCord = blockYCord + 16;
@@ -180,7 +179,7 @@ class Mouse {
         if (Block.blockInLocation(x - 16, y)) {     // if there is a game block to the left of the mouse.
             let blockXCord = x - 32;
             if (blockXCord < 0) {
-                    return false;
+                return false;
             }
             while (Block.blockInLocation(blockXCord, y)) {
                 let blockXCord = blockXCord - 16;
@@ -239,7 +238,7 @@ class Mouse {
         if (Block.blockInLocation(x + 16, y)) {     // if there is a game block to the right of the mouse.
             let blockXCord = x + 32;
             if (blockXCord > 496) {
-                    return false;
+                return false;
             }
             while (Block.blockInLocation(blockXCord, y)) {
                 let blockXCord = blockXCord + 16;

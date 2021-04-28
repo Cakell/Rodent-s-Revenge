@@ -8,6 +8,7 @@ class Main {
 
         do RodentGame.init();
         do Graphics.init();
+		do CatGraphics.init();
         do Block.init();
         do Mouse.init();
         do Cat.init();

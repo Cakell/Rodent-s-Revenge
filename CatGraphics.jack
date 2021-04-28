@@ -1,0 +1,85 @@
+
+/** Implements the graphics of the cat
+    (Since the cat has various graphics - they were extracted to another class). */
+class CatGraphics {
+
+    static Array standingCatBitmap, sittingCatBitmap, cheeseBitmap;
+
+    /** Initializes the static variables. */
+    function void init() {
+        let standingCatBitmap = Array.new(16);
+		let standingCatBitmap[0] = 1;
+        let standingCatBitmap[1] = 17410;
+        let standingCatBitmap[2] = -22014;
+        let standingCatBitmap[3] = -17918;
+        let standingCatBitmap[4] = -32255;
+        let standingCatBitmap[5] = -21507;
+        let standingCatBitmap[6] = -32253;
+        let standingCatBitmap[7] = -28159;
+        let standingCatBitmap[8] = 27649;
+        let standingCatBitmap[9] = 4097;
+        let standingCatBitmap[10] = 4602;
+        let standingCatBitmap[11] = 9498;
+        let standingCatBitmap[12] = 23849;
+        let standingCatBitmap[13] = 21833;
+        let standingCatBitmap[14] = 26994;
+        let standingCatBitmap[15] = 3612;
+
+        let sittingCatBitmap = Array.new(16);
+        let sittingCatBitmap[0] = 0;
+        let sittingCatBitmap[1] = 17408;
+        let sittingCatBitmap[2] = -22016;
+        let sittingCatBitmap[3] = -17920;
+        let sittingCatBitmap[4] = -32256;
+        let sittingCatBitmap[5] = -21512;
+        let sittingCatBitmap[6] = -32252;
+        let sittingCatBitmap[7] = -28158;
+        let sittingCatBitmap[8] = 27650;
+        let sittingCatBitmap[9] = 4099;
+        let sittingCatBitmap[10] = 5317;
+        let sittingCatBitmap[11] = 11529;
+        let sittingCatBitmap[12] = 5105;
+        let sittingCatBitmap[13] = 3074;
+        let sittingCatBitmap[14] = 12;
+        let sittingCatBitmap[15] = 0;
+
+        let cheeseBitmap = Array.new(16);
+        let cheeseBitmap[0] = 0;
+        let cheeseBitmap[1] = 0;
+        let cheeseBitmap[2] = 0;
+        let cheeseBitmap[3] = 0;
+        let cheeseBitmap[4] = 16382;
+        let cheeseBitmap[5] = 32766;
+        let cheeseBitmap[6] = 32762;
+        let cheeseBitmap[7] = 24562;
+        let cheeseBitmap[8] = 20450;
+        let cheeseBitmap[9] = 18370;
+        let cheeseBitmap[10] = 9092;
+        let cheeseBitmap[11] = 4104;
+        let cheeseBitmap[12] = 2064;
+        let cheeseBitmap[13] = 1056;
+        let cheeseBitmap[14] = 960;
+        let cheeseBitmap[15] = 0;
+		
+		return;
+    }
+
+    /** Draws on the screen the cat while it is standing.   */
+    function void drawStanding(int xIndex, int yIndex) {
+        do Graphics.draw(xIndex, yIndex, standingCatBitmap);
+        return;
+    }
+
+    /** Draws on the screen the cat while it is sitting. */
+    function void drawSitting(int xIndex, int yIndex) {
+        do Graphics.draw(xIndex, yIndex, sittingCatBitmap);
+        return;
+    }
+
+    /** Draws on the screen the cheese that replaces a beaten cat. */
+    function void drawCheese(int xIndex, int yIndex) {
+        do Graphics.draw(xIndex, yIndex, cheeseBitmap);
+        return;
+    }
+
+}
