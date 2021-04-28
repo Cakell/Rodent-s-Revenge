@@ -1,5 +1,4 @@
 
-
 /** Implements a cat in the Rodent's Revenge game. */
 class Cat {
 
@@ -20,7 +19,7 @@ class Cat {
 		let CHEESE = 2;
 		let BLOCK_SIZE = 16;
 		let SCREEN_BASE_ADDRESS = 16384;
-		return; 
+		return;
 	}
 
 	/** Constructs a new cat with the default location. */
@@ -48,7 +47,7 @@ class Cat {
 		do Memory.deAlloc(this);
 		return;
 	}
-	
+
 	/** Gets the ID of the cat. */
 	method int getID() {
 		return id;
@@ -74,7 +73,7 @@ class Cat {
 		let status = newStatus;
 		return;
 	}
-	
+
 	/** Gets the value of the field 'pushedByMouse'.
 		i.e. returns true only if the mouse's last movement pushed the cat.		*/
 	method boolean getPushedByMouse() {
@@ -86,14 +85,14 @@ class Cat {
 		let pushedByMouse = pushedByMouseValue;
 		return;
 	}
-	
+
 	/** Gets the value of the field 'squashed'.
 		i.e. returns true only if the mouse has squashed
 		the cat after it has turned into cheese.			*/
 	method boolean getSquashed() {
 		return squashed;
 	}
-	
+
 	/** Sets the value of the field 'squashed' to true (its value can't be set back to false).	*/
 	method void setSquashedToTrue() {
 		let squashed = true;
@@ -192,7 +191,7 @@ class Cat {
 		do Screen.drawRectangle(x, y, x + BLOCK_SIZE - 1, y + BLOCK_SIZE - 1);
 		return;
 	}
-	
+
 	/** Returns true if there is a standing cat in the 16x16 bitmap whose top-left is (xCoord, yCoord).
 		Retruns false otherwise. */
 	method boolean inLocation(int xCoord, int yCoord) {
@@ -201,7 +200,7 @@ class Cat {
 		}
 		return false;
 	}
-	
+
 	/** Returns true if there is a standing cat in the 16x16 bitmap whose top-left is (xCoord, yCoord).
 		Retruns false otherwise. */
 	function boolean standingCatInLocation(int xCoord, int yCoord) {
@@ -212,7 +211,7 @@ class Cat {
 		}
 		return false;
 	}
-	
+
 	/** Returns true if there is a cat in the 16x16 bitmap whose top-left is (xCoord, yCoord).
 		Retruns false otherwise. */
 	function boolean catInLocation(int xCoord, int yCoord) {
@@ -239,7 +238,7 @@ class Cat {
 		}
 		return true;
    }
-   
+
    /** Checks if the cat can move down-left (diagonally).
        Returns false if the cat is in a rightmost or bottommost cell,
 	   or if there is a game block on its lower-right.

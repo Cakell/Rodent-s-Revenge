@@ -21,7 +21,7 @@ class RodentGame {
 	field Cat cat0, cat1;						// the cats of this game
 	field boolean cat0WasEaten, cat1WasEaten;	// The player wins when both of them are true.
 	field int score;							// Increases when the mouse eats the cheese.
-	field int direction;						// the mouse's current direction: 
+	field int direction;						// the mouse's current direction:
 												// 0=none, 1=up, 2=down, 3=left, 4=right
 
 	/** Initializes the static variables. */
@@ -42,7 +42,7 @@ class RodentGame {
 		let LEFT_ARROW = 130;
 		let RIGHT_ARROW = 132;
 
-		return; 
+		return;
 	}
 
 	/** Constructs a new Rodent Game. */
@@ -197,7 +197,7 @@ class RodentGame {
 			let direction = 0;					// Resets state of the previous iteration.
 			do cat0.setPushedByMouse(false);
 			do cat1.setPushedByMouse(false);
-			
+
 			let key = Keyboard.keyPressed();
 
 			if (key = Q)			{ return;					}	// Ends the game.
@@ -208,7 +208,7 @@ class RodentGame {
 
 			do mouse.move(direction, cat0, cat1);
 			if (mouse.pushedBlock()) {
-				
+
 				if (cat0.getSquashed()) {
 					let cat0WasEaten = true;
 					do cat0.dispose();
@@ -216,7 +216,7 @@ class RodentGame {
 				if (cat0.getPushedByMouse()) {
 					do cat0.move(mouse.getX(), mouse.getY());
 				}
-				
+
 				if (cat1.getSquashed()) {
 					let cat1WasEaten = true;
 					do cat1.dispose();
@@ -224,7 +224,7 @@ class RodentGame {
 				if (cat1.getPushedByMouse()) {
 					do cat1.move(mouse.getX(), mouse.getY());
 				}
-				
+
 				do mouse.drawPushedBlock();
 				do mouse.draw();
 				do updateCatStatus();
@@ -241,13 +241,13 @@ class RodentGame {
 			if (mouseAndCatCollided()) {
 				return;
 			}
-			
+
 			let key = 0;
 			do Sys.wait(100);		// delays the next movement
 		} // while
 		return;
 	}
-	
+
 	function boolean restart() {
 		var char key;
 		while (true) {

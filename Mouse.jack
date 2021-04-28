@@ -23,7 +23,7 @@ class Mouse {
 		let BLOCK_SIZE = 16;
 		let SCREEN_BASE_ADDRESS = 16384;
 		let CHEESE = 2;
-		return; 
+		return;
 	}
 
 	/** Constructs a new mouse with the default location. */
@@ -355,7 +355,7 @@ class Mouse {
 		let pushedBlock = false;		// Resets state from previous call.
 		let vertical = false;
 		let blockPushedCat = false;
-		
+
 		if (direction = UP) {
 			let vertical = true;
 			do moveUp(cat0, cat1);
